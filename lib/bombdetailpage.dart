@@ -96,40 +96,6 @@ class BombDetailPage extends StatelessWidget {
     );
   }
 
-  // ignore: non_constant_identifier_names
-  Widget _test_restful() {
-    return ListView(
-      children: <Widget>[
-        Container(
-          //padding: new EdgeInsets.fromLTRB(50, 500, 50, 30),
-          child: FutureBuilder<ContainerData>(
-            future: get_data('get_container_data_by_id?', 'id=5'),
-            builder: (context, snapshot) {
-              // print(snapshot.hasData);
-              // print(snapshot.connectionState);
-              // //
-              //print(snapshot.hasData);
-              if (snapshot.hasData) {
-                print('Test 1');
-                //print(snapshot.data);
-                // print(snapshot.data.id);
-                // print(snapshot.data.createdAT);
-                return _text_keti(snapshot.data.date);
-                //return Text('${snapshot.data.date}');
-              } else if (snapshot.hasError) {
-                print('Test 2');
-                return Text("${snapshot.error}");
-              }
-              //}
-              print('Test 3');
-              return CircularProgressIndicator();
-            },
-          ),
-        )
-      ],
-    );
-  }
-
   Widget _test_restful1() {
     return Container(
       //padding: new EdgeInsets.fromLTRB(50, 500, 50, 30),
@@ -336,50 +302,6 @@ class BombDetailPage extends StatelessWidget {
         bombdata.name + " Detect",
         style: TextStyle(
             fontWeight: FontWeight.bold, fontSize: 20, color: Colors.red),
-      ),
-    );
-  }
-
-  Widget _getchart3() {
-    return Container(
-      //padding: new EdgeInsets.fromLTRB(50, 500, 50, 30),
-      child: Center(
-        child: FutureBuilder(
-          future: readJson('data/' + bombdata.name + '.json'),
-          builder: (context, snapshot) {
-            if (snapshot.hasData) {
-              print(snapshot.data.ims.runtimeType);
-              var ims = snapshot.data.ims;
-              var data = ims.map((x) => int.parse(x)).toList();
-              List<int> d = [...data]; //convert dynamic to List<int>
-              print('convert type');
-              print(d.runtimeType);
-              return Container(
-                //padding: new EdgeInsets.fromLTRB(50, 300, 50, 30),
-                child: new Stack(
-                  children: <Widget>[
-                    SfSparkLineChart(
-                      lastPointColor: Colors.red,
-                      color: Colors.white,
-                      trackball: SparkChartTrackball(
-                          activationMode: SparkChartActivationMode.tap,
-                          backgroundColor: Colors.red),
-                      marker: SparkChartMarker(
-                          displayMode: SparkChartMarkerDisplayMode.high),
-                      labelDisplayMode: SparkChartLabelDisplayMode.high,
-                      // data: <double>[.data],
-                      data: d,
-                    ),
-                  ],
-                ),
-              );
-            } else if (snapshot.hasError) {
-              print("hasError");
-              return Text("${snapshot.error}");
-            }
-            return CircularProgressIndicator();
-          },
-        ),
       ),
     );
   }

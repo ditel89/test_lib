@@ -73,8 +73,8 @@ class HomePage extends StatelessWidget {
             ),
           ),
           new DrugHomePageBody(),
-          ketiText("DB"),
-          new DBHomePageBody(),
+          // ketiText("DB"),
+          // new DBHomePageBody(),
         ],
       ),
     );
