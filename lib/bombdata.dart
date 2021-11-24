@@ -1,19 +1,19 @@
 class BombData {
   final int typeid;
-  final String casno;
-  final String chemicalformula;
-  final String apparence;
-  final String density;
-  final String meltingpoint;
-  final String boilingpoint;
-  final String vaporpressure;
-  final String solubilitywater;
-  final String solublesolvent;
-  final String ionizationenergy;
-  final String shocksensitivity;
-  final String frictionsensitivity;
-  final String detonationvelocity;
-  final String refactor;
+  String casno;
+  String chemicalformula;
+  String apparence;
+  String density;
+  String meltingpoint;
+  String boilingpoint;
+  String vaporpressure;
+  String solubilitywater;
+  String solublesolvent;
+  String ionizationenergy;
+  String shocksensitivity;
+  String frictionsensitivity;
+  String detonationvelocity;
+  String refactor;
   //local data
   final String id;
   final String name;
@@ -24,7 +24,7 @@ class BombData {
   final String image;
   final String formula;
 
-  const BombData({
+  BombData({
     this.typeid,
     this.casno,
     this.chemicalformula,
@@ -73,7 +73,7 @@ class BombData {
 }
 
 List<BombData> bombDatas = [
-  const BombData(
+  BombData(
     id: "101",
     name: "TNT",
     location: "118-96-7",
@@ -89,7 +89,7 @@ List<BombData> bombDatas = [
     boilingpoint: "240°C",
     meltingpoint: "80.35°C",
   ),
-  const BombData(
+  BombData(
     id: "102",
     name: "RDX",
     location: "121-82-4",
@@ -105,7 +105,7 @@ List<BombData> bombDatas = [
     boilingpoint: "234°C",
     meltingpoint: "205.5°C",
   ),
-  const BombData(
+  BombData(
     id: "103",
     name: "PETN",
     location: "1978-11-02",
