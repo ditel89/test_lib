@@ -41,13 +41,15 @@ Future<Ims> readJson(String path) async {
 
 String address = 'http://123.214.186.168:3810/';
 
+String item;
 // ignore: non_constant_identifier_names
-Future<BombData> getbombdata(String comm, id) async {
+Future<BombData> getbombdata(String comm, String id) async {
   print('1. get data');
-  final response = await http.get(address + comm + 'id=' + id);
-  print(address + comm + 'id=' + id);
-  print(response.body);
-  print(response.statusCode);
+  final response = await http.get(address + comm + 'data_type_id=' + id);
+  // print(address + comm + 'id=' + id);
+  //print(response.body);
+  // print(response.statusCode);
+  item = response.body;
   if (response.statusCode == 200) {
     // If the server did return a 200 OK response,
     // then parse the JSON.
@@ -80,7 +82,7 @@ Future<BombData> postbombdata(
     'chemical_formula': postData[1],
     'density': postData[2],
     'vapor_pressure': postData[3],
-    'boiling_poing': postData[4],
+    'boiling_point': postData[4],
     'melting_point': postData[5],
     'shock_sensitivity': postData[6],
     'friction_sensitivity': postData[7],
@@ -94,8 +96,8 @@ Future<BombData> postbombdata(
   });
 
   print('post data ???');
-  print(address + comm);
-  print(datatypeid);
+  // print(address + comm);
+  // print(datatypeid);
   print(postData);
   print(response.body);
   print(response.statusCode);
@@ -133,6 +135,23 @@ class _BombDetailPageState extends State<BombDetailPage> {
     });
   }
 
+  // @override
+  // Widget build(BuildContext context) {
+  //   return new Scaffold(
+  //     body: new Container(
+  //       constraints: new BoxConstraints.expand(),
+  //       color: new Color(0xFF736AB7),
+  //       child: new Stack(
+  //         children: <Widget>[
+  //           _getBackground(),
+  //           _getGradient(),
+  //           _getContent(),
+  //           _getToolbar(context),
+  //         ],
+  //       ),
+  //     ),
+  //   );
+  // }
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
@@ -144,9 +163,6 @@ class _BombDetailPageState extends State<BombDetailPage> {
             _getBackground(),
             _getGradient(),
             _getContent(),
-//            new DBHomePageBody(),
-            //_getchart(),
-            //_getchart2(),
             _getToolbar(context),
           ],
         ),
@@ -154,37 +170,138 @@ class _BombDetailPageState extends State<BombDetailPage> {
     );
   }
 
+  // List<Color> gradientColors = [
+  //   const Color(0xff23b6e6),
+  //   const Color(0xff02d39a),
+  // ];
+
+  Container _getBackground() {
+    return new Container(
+      padding: new EdgeInsets.fromLTRB(30.0, 72.0, 0.0, 50.0),
+      // child: new Text(
+      //   "Digital Library",
+      //   style: TextStyle(
+      //       fontWeight: FontWeight.bold, fontSize: 50, color: Colors.white),
+      // ),
+      decoration: new BoxDecoration(
+        gradient: new LinearGradient(
+          colors: [
+            const Color(0xFF3366FF),
+            const Color(0xFF00CCFF),
+          ],
+          begin: const FractionalOffset(0.0, 0.0),
+          end: const FractionalOffset(0.5, 0.0),
+          stops: [0.0, 0.5],
+          tileMode: TileMode.clamp,
+        ),
+      ),
+      constraints: new BoxConstraints.expand(height: 300.0),
+    );
+  }
+
+  Container _getGradient() {
+    return new Container(
+      margin: new EdgeInsets.only(top: 190.0),
+      height: 110.0,
+      decoration: new BoxDecoration(
+        gradient: new LinearGradient(
+          colors: <Color>[
+            new Color(0x00736AB7),
+            new Color(0xFF736AB7),
+          ],
+          stops: [0.0, 0.9],
+          begin: const FractionalOffset(0.0, 0.0),
+          end: const FractionalOffset(0.0, 1.0),
+        ),
+      ),
+    );
+  }
+
+  Widget _getToolbar(BuildContext context) {
+    return new Container(
+      margin: new EdgeInsets.only(top: MediaQuery.of(context).padding.top),
+      child: new BackButton(color: Colors.white),
+    );
+  }
+
+  Widget _getContent() {
+    //final _overviewTitle = "Overview".toUpperCase();
+    return new ListView(
+      padding: new EdgeInsets.fromLTRB(0.0, 72.0, 0.0, 50.0),
+      children: <Widget>[
+        // new Row(
+        //   ,
+        //   horizontal: false,
+        // ),
+        new Container(
+          padding: new EdgeInsets.symmetric(horizontal: 32.0, vertical: 24.0),
+          //padding: new EdgeInsets.fromLTRB(32.0, 0.0, 0.0, 0.0),
+          child: new Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              new Text("Digital Library",
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 70,
+                      color: Colors.white)),
+              new Separator(),
+              new Text(bombdata.name,
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20,
+                      color: Colors.white)),
+              new Separator(),
+              new Row(
+                children: [
+                  new Image.asset(bombdata.image),
+                  //new Image.asset("assets/img/tnt2.png"),
+                ],
+              ),
+              new Separator(),
+              //new Text(.description, style: Style.commonTextSt),
+              new Text(bombdata.description,
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18,
+                      color: Colors.white)),
+              new Separator(),
+              _test_restful1(),
+              new Separator(),
+              //_getchart3(),
+              _getchart(),
+              new Separator(),
+              _postFormfield(),
+              new Separator(),
+              uploadIMSdata(),
+              new Separator(),
+            ],
+          ),
+        )
+      ],
+    );
+  }
+
+  // ignore: non_constant_identifier_names
   Widget _text_keti(String text) {
     return Text(
-      text,
+      text ?? '',
       style: TextStyle(
           fontWeight: FontWeight.bold, fontSize: 20, color: Colors.white),
     );
   }
 
+  // ignore: non_constant_identifier_names
   Widget _test_restful1() {
     return Container(
       //padding: new EdgeInsets.fromLTRB(50, 500, 50, 30),
       child: Center(
         child: FutureBuilder<BombData>(
-          //future: get_data('get_container_data_by_data_type_id?', .id),
-          future: getbombdata('get_bomb_data_by_id?', '1'),
+          future:
+              getbombdata('get_container_data_by_data_type_id?', bombdata.id),
           builder: (context, snapshot) {
-            // print(snapshot.hasData);
-            // print(snapshot.connectionState);
-            // //
-            //print(snapshot.hasData);
             if (snapshot.hasData) {
-              print('Test 1');
-              //print(snapshot.data);
-              // print(snapshot.data.id);
-              // print(snapshot.data.createdAT);
-              //return Text("restful");
-              // return new Text(snapshot.data.date,
-              //     style: TextStyle(
-              //         fontWeight: FontWeight.bold,
-              //         fontSize: 20,
-              //         color: Colors.white));
+              print('snapshot data');
+              print(snapshot.data.casno);
               return DataTable(
                 horizontalMargin: 12.0,
                 columns: [
@@ -212,18 +329,20 @@ class _BombDetailPageState extends State<BombDetailPage> {
                     DataCell(_text_keti('Melting point')),
                     DataCell(_text_keti(snapshot.data.meltingpoint))
                   ]),
-
-                  // DataRow(cells: [DataCell(_text_keti('A2'))]),
-                  // DataRow(cells: [DataCell(_text_keti('A3'))]),
-                  // DataRow(cells: [DataCell(_text_keti('A4'))]),
+                  DataRow(cells: [
+                    DataCell(_text_keti('Shock Sensitivity')),
+                    DataCell(_text_keti(snapshot.data.shocksensitivity)),
+                    DataCell(_text_keti('Friction Sensitivity')),
+                    DataCell(_text_keti(snapshot.data.frictionsensitivity))
+                  ]),
+                  DataRow(cells: [
+                    DataCell(_text_keti('Detonation Velocity')),
+                    DataCell(_text_keti(snapshot.data.detonationvelocity)),
+                    DataCell(_text_keti('RE Factor')),
+                    DataCell(_text_keti(snapshot.data.refactor))
+                  ]),
                 ],
               );
-              //return Text('${snapshot.data.date}');
-              // return ListView(
-              //   children: <Widget>[
-              //     new Text('${snapshot.data.id}'),
-              //   ],
-              // );
             } else if (snapshot.hasError) {
               print('Test 2');
               return Text("${snapshot.error}");
@@ -236,6 +355,28 @@ class _BombDetailPageState extends State<BombDetailPage> {
       ),
     );
   }
+
+  // Widget getData(value) {
+  //   return FutureBuilder<BombData>(
+  //     future: getbombdata('get_container_data_by_data_type_id?', bombdata.id),
+  //     builder: (context, snapshot) {
+  //       if (snapshot.hasData) {
+  //         final split1 = item.split(",");
+  //         List split2 = [];
+  //         for (int i = 0; i < split1.length; i++) {
+  //           if (i > 17) {
+  //             split2.add(split1[i]);
+  //           }
+  //         }
+  //         List result = split2[value].split(":");
+  //         return Text(result[1]);
+  //       } else if (snapshot.hasError) {
+  //         return Text("${snapshot.error}");
+  //       }
+  //       return CircularProgressIndicator();
+  //     },
+  //   );
+  // }
 
   Widget _getchart() {
     return Container(
@@ -412,6 +553,8 @@ class _BombDetailPageState extends State<BombDetailPage> {
                 TextField(
                   controller: _passwd,
                   decoration: InputDecoration(hintText: 'enter passwd'),
+                  obscureText: true,
+                  //textInputAction: TextInputAction.go,
                 )
               ],
             ),
@@ -426,10 +569,7 @@ class _BombDetailPageState extends State<BombDetailPage> {
                   setState(() {
                     postbombdata('add_bomb_data?', bombdata.id, postData);
                   });
-
-                  //this.setState(() {});
-
-                  //post .....
+                  postData.clear();
                 } else {
                   showDialog<String>(
                     context: context,
@@ -478,25 +618,6 @@ class _BombDetailPageState extends State<BombDetailPage> {
 
   var postData = List<String>.generate(8, (index) => "-");
 
-  Widget renderValues() {
-    return Column(
-      children: [
-        Text('name : ' + postData[0]),
-        Text('name : ' + postData[1]),
-        Text('name : ' + postData[2]),
-        Text('name : ' + postData[3]),
-        Text('name : ' + postData[4]),
-        //Text('name : ' + postData[5]),
-        // Text('name : ' + bombData.casno),
-        // Text('email : ' + bombData.chemicalformula),
-        // Text('password : ' + bombData.density),
-        // Text('address : ' + bombData.vaporpressure),
-      ],
-    );
-  }
-
-  String casno = '';
-
   final formKey = GlobalKey<FormState>();
   Widget _postFormfield() {
     return Container(
@@ -522,18 +643,11 @@ class _BombDetailPageState extends State<BombDetailPage> {
                               setState(() {
                                 postData.insert(0, val);
                               });
-                              //testclass = bombdata.casno;
-                              //bombData.casno = val;
                             },
                             validator: (val) {
                               if (val.length < 1) {
-                                return '이름은 필수사항입니다.';
+                                return 'essential.';
                               }
-
-                              if (val.length < 2) {
-                                return '이름은 두글자 이상 입력 해주셔야합니다.';
-                              }
-
                               return null;
                             },
                           ),
@@ -546,13 +660,8 @@ class _BombDetailPageState extends State<BombDetailPage> {
                             },
                             validator: (val) {
                               if (val.length < 1) {
-                                return '이름은 필수사항입니다.';
+                                return 'essential.';
                               }
-
-                              if (val.length < 2) {
-                                return '이름은 두글자 이상 입력 해주셔야합니다.';
-                              }
-
                               return null;
                             },
                           ),
@@ -565,13 +674,8 @@ class _BombDetailPageState extends State<BombDetailPage> {
                             },
                             validator: (val) {
                               if (val.length < 1) {
-                                return '이름은 필수사항입니다.';
+                                return 'essential.';
                               }
-
-                              if (val.length < 2) {
-                                return '이름은 두글자 이상 입력 해주셔야합니다.';
-                              }
-
                               return null;
                             },
                           ),
@@ -584,13 +688,8 @@ class _BombDetailPageState extends State<BombDetailPage> {
                             },
                             validator: (val) {
                               if (val.length < 1) {
-                                return '이름은 필수사항입니다.';
+                                return 'essential.';
                               }
-
-                              if (val.length < 2) {
-                                return '이름은 두글자 이상 입력 해주셔야합니다.';
-                              }
-
                               return null;
                             },
                           ),
@@ -603,13 +702,8 @@ class _BombDetailPageState extends State<BombDetailPage> {
                             },
                             validator: (val) {
                               if (val.length < 1) {
-                                return '이름은 필수사항입니다.';
+                                return 'essential.';
                               }
-
-                              if (val.length < 2) {
-                                return '이름은 두글자 이상 입력 해주셔야합니다.';
-                              }
-
                               return null;
                             },
                           ),
@@ -627,13 +721,8 @@ class _BombDetailPageState extends State<BombDetailPage> {
                             },
                             validator: (val) {
                               if (val.length < 1) {
-                                return '이름은 필수사항입니다.';
+                                return 'essential.';
                               }
-
-                              if (val.length < 2) {
-                                return '이름은 두글자 이상 입력 해주셔야합니다.';
-                              }
-
                               return null;
                             },
                           ),
@@ -646,13 +735,8 @@ class _BombDetailPageState extends State<BombDetailPage> {
                             },
                             validator: (val) {
                               if (val.length < 1) {
-                                return '이름은 필수사항입니다.';
+                                return 'essential.';
                               }
-
-                              if (val.length < 2) {
-                                return '이름은 두글자 이상 입력 해주셔야합니다.';
-                              }
-
                               return null;
                             },
                           ),
@@ -665,13 +749,8 @@ class _BombDetailPageState extends State<BombDetailPage> {
                             },
                             validator: (val) {
                               if (val.length < 1) {
-                                return '이름은 필수사항입니다.';
+                                return 'essential.';
                               }
-
-                              if (val.length < 2) {
-                                return '이름은 두글자 이상 입력 해주셔야합니다.';
-                              }
-
                               return null;
                             },
                           ),
@@ -684,13 +763,8 @@ class _BombDetailPageState extends State<BombDetailPage> {
                             },
                             validator: (val) {
                               if (val.length < 1) {
-                                return '이름은 필수사항입니다.';
+                                return 'essential.';
                               }
-
-                              if (val.length < 2) {
-                                return '이름은 두글자 이상 입력 해주셔야합니다.';
-                              }
-
                               return null;
                             },
                           ),
@@ -705,13 +779,8 @@ class _BombDetailPageState extends State<BombDetailPage> {
                             },
                             validator: (val) {
                               if (val.length < 1) {
-                                return '이름은 필수사항입니다.';
+                                return 'essential.';
                               }
-
-                              if (val.length < 2) {
-                                return '이름은 두글자 이상 입력 해주셔야합니다.';
-                              }
-
                               return null;
                             },
                           ),
@@ -719,10 +788,6 @@ class _BombDetailPageState extends State<BombDetailPage> {
                       ),
                       Container(height: 35.0),
                       renderButton(),
-                      //Container(height: 35.0),
-                      //renderValues(),
-                      //Text(bombData.casno),
-                      // renderValues(),
                     ],
                   ),
                 ),
@@ -734,156 +799,97 @@ class _BombDetailPageState extends State<BombDetailPage> {
     );
   }
 
+  Future<int> postIMSdata(PlatformFile file, typeID) async {
+    print("test_post_imsdata---1");
+    http.Response response = await http
+        .post(Uri.parse(address + "add_ims_data_file"), body: file.bytes);
+    print("test_post_imsdata---2");
+    return response.statusCode;
+  }
+
   Widget uploadIMSdata() {
     return Container(
-        child: Stack(
-      children: <Widget>[
-        ketitext("Upload IMS Data"),
-        Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Container(height: 50),
-            Container(
-              decoration: BoxDecoration(
-                border: Border.all(
-                  width: 1,
-                ),
-                color: Colors.white,
-              ),
-              width: 350,
-              height: 350,
-            ),
-            Container(height: 20),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                ElevatedButton(
-                  onPressed: () => _pickFiles(),
-                  child: Text("Choose a file"),
-                ),
-                Container(width: 10),
-                ElevatedButton(
-                  onPressed: () {},
-                  child: Text("Upload"),
-                ),
-              ],
-            )
-          ],
-        ),
-      ],
-    ));
-  }
-
-  List<Color> gradientColors = [
-    const Color(0xff23b6e6),
-    const Color(0xff02d39a),
-  ];
-
-  Container _getBackground() {
-    return new Container(
-      padding: new EdgeInsets.fromLTRB(30.0, 72.0, 0.0, 50.0),
-
-      //child: new Image.network(
-      // child: new Image.asset(
-      //   .picture,
-      //   fit: BoxFit.cover,
-      //   height: 300.0,
-      // ),
-      // child: new Image.asset(
-      //   "img/keti.jpg",
-      //   fit: BoxFit.cover,
-      //   height: 300.0,
-      // ),
-      child: new Text(
-        "Digital Library",
-        style: TextStyle(
-            fontWeight: FontWeight.bold, fontSize: 50, color: Colors.white),
-      ),
-      decoration: new BoxDecoration(
-        gradient: new LinearGradient(
-          colors: [
-            const Color(0xFF3366FF),
-            const Color(0xFF00CCFF),
-          ],
-          begin: const FractionalOffset(0.0, 0.0),
-          end: const FractionalOffset(0.5, 0.0),
-          stops: [0.0, 0.5],
-          tileMode: TileMode.clamp,
-        ),
-      ),
-      constraints: new BoxConstraints.expand(height: 300.0),
-    );
-  }
-
-  Container _getGradient() {
-    return new Container(
-      margin: new EdgeInsets.only(top: 190.0),
-      height: 110.0,
-      decoration: new BoxDecoration(
-        gradient: new LinearGradient(
-          colors: <Color>[
-            new Color(0x00736AB7),
-            new Color(0xFF736AB7),
-          ],
-          stops: [0.0, 0.9],
-          begin: const FractionalOffset(0.0, 0.0),
-          end: const FractionalOffset(0.0, 1.0),
-        ),
-      ),
-    );
-  }
-
-  Widget _getContent() {
-    //final _overviewTitle = "Overview".toUpperCase();
-    return new ListView(
-      padding: new EdgeInsets.fromLTRB(0.0, 72.0, 0.0, 50.0),
-      children: <Widget>[
-        // new Row(
-        //   ,
-        //   horizontal: false,
-        // ),
-        new Container(
-          padding: new EdgeInsets.symmetric(horizontal: 32.0, vertical: 128.0),
-          //padding: new EdgeInsets.fromLTRB(32.0, 0.0, 0.0, 0.0),
-          child: new Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+      child: Stack(
+        children: <Widget>[
+          ketitext("Upload IMS Data"),
+          Container(height: 100),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              //new Text(_overviewTitle, style: Style.headerTextSt),
-              // new Text(_overviewTitle,
-              new Text(bombdata.name,
-                  style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20,
-                      color: Colors.white)),
-              new Separator(),
-              new Image.asset(bombdata.image),
-              new Separator(),
-              //new Text(.description, style: Style.commonTextSt),
-              new Text(bombdata.description,
-                  style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18,
-                      color: Colors.white)),
-              new Separator(),
-              _test_restful1(),
-              new Separator(),
-              //_getchart3(),
-              _getchart(),
-              new Separator(),
-              _postFormfield(),
-              new Separator(),
-              uploadIMSdata(),
+              Container(height: 50),
+              Container(
+                decoration: BoxDecoration(
+                  border: Border.all(
+                    width: 1,
+                  ),
+                  color: Colors.white,
+                ),
+                width: 400,
+                height: 50,
+                //child: Text("Choose a file"),
+                child: ListView.builder(
+                  itemCount: _files.isEmpty ? 1 : _files.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    return _files.isEmpty
+                        ? const ListTile(title: Text("upload IMS json file"))
+                        : ListTile(
+                            title: Text(_files.elementAt(index).name),
+                            trailing: IconButton(
+                              icon: const Icon(Icons.delete),
+                              onPressed: () {
+                                setState(
+                                  () {
+                                    _files.removeAt(index);
+                                  },
+                                );
+                              },
+                            ),
+                          );
+                  },
+                ),
+              ),
+              Container(width: 10),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  ElevatedButton(
+                    onPressed: () => _pickFiles(),
+                    child: Text("Choose a file"),
+                  ),
+                  Container(width: 10),
+                  ElevatedButton(
+                    onPressed: () {
+                      if (_files.isNotEmpty) {
+                        Navigator.of(context).pop();
+                        setState(() {
+                          postIMSdata(_files.elementAt(0), bombdata.id);
+                        });
+                      } else {
+                        showDialog<String>(
+                          context: context,
+                          builder: (BuildContext context) => AlertDialog(
+                            title: const Text('ERROR no file'),
+                            //content: const Text('AlertDialog description'),
+                            actions: <Widget>[
+                              TextButton(
+                                onPressed: () =>
+                                    Navigator.pop(context, 'Cancel'),
+                                child: const Text('Cancel'),
+                              ),
+                            ],
+                          ),
+                        );
+                      }
+                      //postIMSdata(_files.elementAt(0), bombdata.id);
+                    },
+                    child: Text("Upload"),
+                  ),
+                ],
+              )
             ],
           ),
-        )
-      ],
-    );
-  }
-
-  Widget _getToolbar(BuildContext context) {
-    return new Container(
-      margin: new EdgeInsets.only(top: MediaQuery.of(context).padding.top),
-      child: new BackButton(color: Colors.white),
+        ],
+      ),
     );
   }
 }

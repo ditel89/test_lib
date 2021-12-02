@@ -98,7 +98,7 @@ class DrugData {
 
 List<DrugData> drugdatas = [
   const DrugData(
-    id: "101",
+    id: "201",
     name: "drug",
     location: "118-96-7",
     distance: "Trinitrotoluene",
@@ -114,7 +114,7 @@ List<DrugData> drugdatas = [
     meltingpoint: "80.35°C",
   ),
   const DrugData(
-    id: "102",
+    id: "202",
     name: "drug",
     location: "121-82-4",
     distance: "54.6m Km",
@@ -130,7 +130,7 @@ List<DrugData> drugdatas = [
     meltingpoint: "205.5°C",
   ),
   const DrugData(
-    id: "103",
+    id: "203",
     name: "drug",
     location: "1978-11-02",
     distance: "54.6m Km",

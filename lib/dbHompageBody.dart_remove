@@ -1,61 +1,50 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/semantics.dart';
-import 'package:container_lib/bombdata.dart';
 import 'package:container_lib/text_style.dart';
-import 'package:container_lib/bombdetailpage.dart';
+import 'package:container_lib/dbdetailpage.dart';
+import 'package:container_lib/bombdata.dart';
 
-class BombHomePageBody extends StatelessWidget {
+class DBHomePageBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    //return new bombdataRow(bombdatas[0]);
-    return new Expanded(
-      child: new ListView.builder(
-          itemBuilder: (context, index) => new BombRow(bombDatas[index]),
-          itemCount: bombDatas.length,
-          padding: new EdgeInsets.symmetric(vertical: 10.0)),
+    //return new drugdataRow(drugdatas[0]);
+    return new Container(
+      margin: new EdgeInsets.symmetric(vertical: 15.0),
+      child: new DBRow(bombDatas[1]),
+
+      // child: new ListView.builder(
+      //     itemBuilder: (context, index) => new DrugRow(),
+      //     itemCount: 1,
+      //     padding: new EdgeInsets.symmetric(vertical: 1000.0)),
     );
   }
 }
 
-class BombRow extends StatelessWidget {
+class DBRow extends StatelessWidget {
   final BombData bombdata;
   final bool horizontal;
 
-  BombRow(this.bombdata, {this.horizontal = true});
+  DBRow(this.bombdata, {this.horizontal = true});
 
-  BombRow.vertical(this.bombdata) : horizontal = false;
+  DBRow.vertical(this.bombdata) : horizontal = false;
 
   @override
   Widget build(BuildContext context) {
-    final bombdataThumbnail = new Container(
+    final drugdataThumbnail = new Container(
       margin: new EdgeInsets.symmetric(vertical: 16.0),
       //alignment: FractionalOffset.centerLeft,
       alignment:
           horizontal ? FractionalOffset.centerLeft : FractionalOffset.center,
       child: new Hero(
-        tag: "bombdata-hero-${bombdata.id}",
+        tag: "dbdata-hero-${0}",
         child: new Image(
-          image: new AssetImage(bombdata.image),
+          image: new AssetImage("img/db.png"),
           height: 92.0,
           width: 92.0,
         ),
       ),
     );
 
-    Widget _bombdataValue({String value, String image}) {
-      return new Container(
-        child: new Row(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            new Image.asset(image, height: 12.0),
-            new Container(width: 8.0),
-            new Text(value, style: Style.smallTextSt),
-          ],
-        ),
-      );
-    }
-
-    final bombdataCardContent = new Container(
+    final drugdataCardContent = new Container(
       margin: new EdgeInsets.fromLTRB(
           horizontal ? 76.0 : 16.0, horizontal ? 16.0 : 42.0, 16.0, 16.0),
       constraints: new BoxConstraints.expand(),
@@ -65,12 +54,12 @@ class BombRow extends StatelessWidget {
         children: <Widget>[
           new Container(height: 4.0),
           new Text(
-            bombdata.name,
+            "Input",
             style: Style.titleTextSt,
           ),
           new Container(height: 10.0),
           new Text(
-            bombdata.casno,
+            "Hazardous Material",
             style: Style.commonTextSt,
           ),
           new Container(
@@ -83,14 +72,15 @@ class BombRow extends StatelessWidget {
       ),
     );
 
-    final bombdataCard = new Container(
-      child: bombdataCardContent,
+    final drugdataCard = new Container(
+      child: drugdataCardContent,
       height: horizontal ? 124.0 : 154.0,
       margin: horizontal
           ? new EdgeInsets.only(left: 46.0)
           : new EdgeInsets.only(top: 72.0),
       decoration: new BoxDecoration(
-        color: new Color(0xFF333366),
+        // color: new Color(0xFF333366),
+        color: new Color(0xFF336659),
         shape: BoxShape.rectangle,
         borderRadius: new BorderRadius.circular(8.0),
         boxShadow: <BoxShadow>[
@@ -107,7 +97,7 @@ class BombRow extends StatelessWidget {
         onTap: horizontal
             ? () => Navigator.of(context).push(
                   new PageRouteBuilder(
-                    pageBuilder: (_, __, ___) => new BombDetailPage(bombdata),
+                    pageBuilder: (_, __, ___) => new DBDetailPage(bombdata),
                     transitionsBuilder: (context, animation, secondaryAnimation,
                             child) =>
                         new FadeTransition(opacity: animation, child: child),
@@ -122,8 +112,8 @@ class BombRow extends StatelessWidget {
           ),
           child: new Stack(
             children: <Widget>[
-              bombdataCard,
-              bombdataThumbnail,
+              drugdataCard,
+              drugdataThumbnail,
             ],
           ),
         ));
