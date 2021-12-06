@@ -15,13 +15,19 @@ import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:http/http.dart' as http;
 import 'package:file_picker/file_picker.dart';
 
+import 'package:dio/dio.dart';
+
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+
 //import 'package:flutter/services.dart' show rootBundle;
 
 class Ims {
   //final String id;
   final List ims;
 
-  Ims({this.ims});
+  Ims({
+    this.ims,
+  });
 
   factory Ims.fromJson(Map<String, dynamic> json) {
     return Ims(
@@ -45,25 +51,18 @@ String item;
 // ignore: non_constant_identifier_names
 Future<BombData> getbombdata(String comm, String id) async {
   print('1. get data');
-  final response = await http.get(address + comm + 'data_type_id=' + id);
-  // print(address + comm + 'id=' + id);
-  //print(response.body);
-  // print(response.statusCode);
+  final response =
+      await http.get(Uri.parse(address + comm + 'data_type_id=' + id));
   item = response.body;
   if (response.statusCode == 200) {
-    // If the server did return a 200 OK response,
-    // then parse the JSON.
     return BombData.fromJson(jsonDecode(response.body));
   } else {
-    // If the server did not return a 200 OK response,
-    // then throw an exception.
     throw Exception('Failed to load album');
   }
-  //return ContainerData.fromJson(jsonDecode(response.body));
 }
 
 Future<ContainerData> getContainerdata(String comm, id) async {
-  final response = await http.get(address + comm + 'id=' + id);
+  final response = await http.get(Uri.parse(address + comm + 'id=' + id));
   if (response.statusCode == 200) {
     return ContainerData.fromJson(jsonDecode(response.body));
   } else {
@@ -121,37 +120,6 @@ class _BombDetailPageState extends State<BombDetailPage> {
   final BombData bombdata;
   _BombDetailPageState(this.bombdata);
 
-  final List<PlatformFile> _files = [];
-
-  void _pickFiles() async {
-    List<PlatformFile> uploadedFiles = (await FilePicker.platform.pickFiles(
-      allowMultiple: true,
-    ))
-        ?.files;
-    setState(() {
-      for (PlatformFile file in uploadedFiles) {
-        _files.add(file);
-      }
-    });
-  }
-
-  // @override
-  // Widget build(BuildContext context) {
-  //   return new Scaffold(
-  //     body: new Container(
-  //       constraints: new BoxConstraints.expand(),
-  //       color: new Color(0xFF736AB7),
-  //       child: new Stack(
-  //         children: <Widget>[
-  //           _getBackground(),
-  //           _getGradient(),
-  //           _getContent(),
-  //           _getToolbar(context),
-  //         ],
-  //       ),
-  //     ),
-  //   );
-  // }
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
@@ -799,12 +767,73 @@ class _BombDetailPageState extends State<BombDetailPage> {
     );
   }
 
-  Future<int> postIMSdata(PlatformFile file, typeID) async {
-    print("test_post_imsdata---1");
-    http.Response response = await http
-        .post(Uri.parse(address + "add_ims_data_file"), body: file.bytes);
-    print("test_post_imsdata---2");
-    return response.statusCode;
+  final List<PlatformFile> _files = [];
+  void _pickFiles() async {
+    List<PlatformFile> uploadedFiles = (await FilePicker.platform.pickFiles(
+      allowMultiple: false,
+    ))
+        ?.files;
+    setState(() {
+      for (PlatformFile file in uploadedFiles) {
+        _files.add(file);
+      }
+    });
+  }
+
+  postIMSdata() async {
+    if (_files.first != null) {
+      print("start post ims data");
+      var fileBytes = _files.first.bytes;
+      var fileName = _files.first.name;
+      var url = 'http://123.214.186.168:3810/add_ims_data_file';
+
+      var dio = Dio();
+
+      var formData = FormData.fromMap({
+        'data_type_id': bombdata.id,
+        'file': await MultipartFile.fromBytes(fileBytes, filename: fileName)
+      });
+
+      final response = await dio.post(
+        url,
+        data: formData,
+      );
+      print("response.statusCode");
+      if (response.statusCode == 200) {
+        _files.removeAt(0);
+        _files.clear();
+      }
+    } else {
+      throw "Cancelled upload";
+    }
+  }
+
+  _onLoadingProgress(BuildContext context) {
+    Future checkCondition() {
+      return Future.delayed(new Duration(milliseconds: 200), () {
+        if (_files.length != 0) {
+          checkCondition();
+        } else {
+          Navigator.of(context).pop();
+        }
+      });
+    }
+
+    new Future.delayed(new Duration(seconds: 1), () {
+      checkCondition();
+    });
+
+    return SpinKitWave(color: Colors.green, type: SpinKitWaveType.start);
+    // return SpinKitPianoWave(
+    //   size: 100,
+    //   itemBuilder: (BuildContext context, int index) {
+    //     return DecoratedBox(
+    //       decoration: BoxDecoration(
+    //         color: index.isEven ? Colors.red : Colors.green,
+    //       ),
+    //     );
+    //   },
+    // );
   }
 
   Widget uploadIMSdata() {
@@ -858,12 +887,14 @@ class _BombDetailPageState extends State<BombDetailPage> {
                   ),
                   Container(width: 10),
                   ElevatedButton(
-                    onPressed: () {
+                    onPressed: () async {
                       if (_files.isNotEmpty) {
-                        Navigator.of(context).pop();
-                        setState(() {
-                          postIMSdata(_files.elementAt(0), bombdata.id);
-                        });
+                        await showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              postIMSdata();
+                              return _onLoadingProgress(context);
+                            });
                       } else {
                         showDialog<String>(
                           context: context,
@@ -880,7 +911,6 @@ class _BombDetailPageState extends State<BombDetailPage> {
                           ),
                         );
                       }
-                      //postIMSdata(_files.elementAt(0), bombdata.id);
                     },
                     child: Text("Upload"),
                   ),

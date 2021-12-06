@@ -46,7 +46,7 @@ String address = 'http://123.214.186.168:3810/';
 // ignore: non_constant_identifier_names
 Future<ContainerData> get_data(String comm, id) async {
   print('1. get data');
-  final response = await http.get(address + comm + 'id=' + id);
+  final response = await http.get(Uri.parse(address + comm + 'id=' + id));
   print(address + comm + 'id=' + id);
   print(response.body);
   print(response.statusCode);
@@ -466,7 +466,11 @@ class DrugDetailPage extends StatelessWidget {
                       fontSize: 20,
                       color: Colors.white)),
               new Separator(),
-              new Image.asset(drugData.image),
+              new Image(
+                image: new AssetImage(drugData.image),
+                height: 150.0,
+                width: 150.0,
+              ),
               new Separator(),
               //new Text(.description, style: Style.commonTextSt),
               new Text(drugData.description,
