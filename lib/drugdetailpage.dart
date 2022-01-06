@@ -1,10 +1,12 @@
 //import 'dart:html';
 import 'dart:convert';
 
+import 'package:container_lib/graph.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:container_lib/drugdata.dart';
 import 'package:container_lib/containerdata.dart';
+
 // import 'package:container_lib/main.dart';
 // import 'package:container_lib/text_style.dart';
 
@@ -482,7 +484,9 @@ class DrugDetailPage extends StatelessWidget {
               _test_restful1(),
               new Separator(),
               //_getchart3(),
-              _getchart(),
+              IMSgraph(drugData.name),
+              //_getchart(),
+              new Separator(),
             ],
           ),
         )
