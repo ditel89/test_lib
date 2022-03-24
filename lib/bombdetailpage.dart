@@ -161,7 +161,7 @@ class _BombDetailPageState extends State<BombDetailPage> {
                       fontSize: 18,
                       color: Colors.white)),
               new Separator(),
-              _test_restful1(),
+              _get_bombdata(),
               new Separator(),
               IMSgraph(bombdata.name),
               new Separator(),
@@ -187,7 +187,7 @@ class _BombDetailPageState extends State<BombDetailPage> {
   }
 
   // ignore: non_constant_identifier_names
-  Widget _test_restful1() {
+  Widget _get_bombdata() {
     return Container(
       //padding: new EdgeInsets.fromLTRB(50, 500, 50, 30),
       child: Center(
