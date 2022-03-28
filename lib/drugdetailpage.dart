@@ -56,11 +56,6 @@ class DrugDetailPage extends StatelessWidget {
   Container _getBackground() {
     return new Container(
       padding: new EdgeInsets.fromLTRB(30.0, 72.0, 0.0, 50.0),
-      child: new Text(
-        "Digital Library",
-        style: TextStyle(
-            fontWeight: FontWeight.bold, fontSize: 50, color: Colors.white),
-      ),
       decoration: new BoxDecoration(
         gradient: new LinearGradient(
           colors: [
@@ -167,21 +162,8 @@ class DrugDetailPage extends StatelessWidget {
           //future: get_data('get_container_data_by_data_type_id?', .id),
           future: getdrugdata('get_container_data_by_id?', '2'),
           builder: (context, snapshot) {
-            // print(snapshot.hasData);
-            // print(snapshot.connectionState);
-            // //
-            //print(snapshot.hasData);
             if (snapshot.hasData) {
               print('Test 1');
-              //print(snapshot.data);
-              // print(snapshot.data.id);
-              // print(snapshot.data.createdAT);
-              //return Text("restful");
-              // return new Text(snapshot.data.date,
-              //     style: TextStyle(
-              //         fontWeight: FontWeight.bold,
-              //         fontSize: 20,
-              //         color: Colors.white));
               return DataTable(
                 horizontalMargin: 12.0,
                 columns: [
@@ -209,18 +191,8 @@ class DrugDetailPage extends StatelessWidget {
                     DataCell(_text_keti('Melting point')),
                     DataCell(_text_keti(drugData.meltingpoint))
                   ]),
-
-                  // DataRow(cells: [DataCell(_text_keti('A2'))]),
-                  // DataRow(cells: [DataCell(_text_keti('A3'))]),
-                  // DataRow(cells: [DataCell(_text_keti('A4'))]),
                 ],
               );
-              //return Text('${snapshot.data.date}');
-              // return ListView(
-              //   children: <Widget>[
-              //     new Text('${snapshot.data.id}'),
-              //   ],
-              // );
             } else if (snapshot.hasError) {
               print('Test 2');
               return Text("${snapshot.error}");

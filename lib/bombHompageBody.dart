@@ -43,19 +43,6 @@ class BombRow extends StatelessWidget {
       ),
     );
 
-    Widget _bombdataValue({String value, String image}) {
-      return new Container(
-        child: new Row(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            new Image.asset(image, height: 12.0),
-            new Container(width: 8.0),
-            new Text(value, style: Style.smallTextSt),
-          ],
-        ),
-      );
-    }
-
     final bombdataCardContent = new Container(
       margin: new EdgeInsets.fromLTRB(
           horizontal ? 76.0 : 16.0, horizontal ? 16.0 : 42.0, 16.0, 16.0),

@@ -41,19 +41,6 @@ class DrugRow extends StatelessWidget {
       ),
     );
 
-    Widget _drugdataValue({String value, String image}) {
-      return new Container(
-        child: new Row(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            new Image.asset(image, height: 12.0),
-            new Container(width: 8.0),
-            new Text(value, style: Style.smallTextSt),
-          ],
-        ),
-      );
-    }
-
     final drugdataCardContent = new Container(
       margin: new EdgeInsets.fromLTRB(
           horizontal ? 76.0 : 16.0, horizontal ? 16.0 : 42.0, 16.0, 16.0),
@@ -78,23 +65,6 @@ class DrugRow extends StatelessWidget {
             width: 18.0,
             color: new Color(0xff00c6ff),
           ),
-          new Row(
-            children: <Widget>[
-              new Expanded(
-                flex: horizontal ? 1 : 0,
-                child: _drugdataValue(
-                    value: drugdata.distance, image: 'img/ic_distance.png'),
-              ),
-              new Container(
-                width: 32.0,
-              ),
-              new Expanded(
-                flex: horizontal ? 1 : 0,
-                child: _drugdataValue(
-                    value: drugdata.gravity, image: 'img/ic_gravity.png'),
-              ),
-            ],
-          )
         ],
       ),
     );

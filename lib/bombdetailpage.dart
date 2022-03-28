@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 
 import 'package:container_lib/bombdata.dart';
 import 'package:container_lib/containerdata.dart';
-import 'package:container_lib/postFormfield.dart';
+import 'package:container_lib/bombpostFormfield.dart';
 // import 'package:container_lib/main.dart';
 // import 'package:container_lib/text_style.dart';
 
@@ -79,11 +79,6 @@ class _BombDetailPageState extends State<BombDetailPage> {
   Container _getBackground() {
     return new Container(
       padding: new EdgeInsets.fromLTRB(30.0, 72.0, 0.0, 50.0),
-      // child: new Text(
-      //   "Digital Library",
-      //   style: TextStyle(
-      //       fontWeight: FontWeight.bold, fontSize: 50, color: Colors.white),
-      // ),
       decoration: new BoxDecoration(
         gradient: new LinearGradient(
           colors: [
